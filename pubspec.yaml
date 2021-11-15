@@ -36,6 +36,12 @@ dependencies:
   cupertino_icons: ^1.0.2
   ootp: ^0.1.1
   base32: ^2.1.1
+  device_info: ^2.0.3
+  platform_device_id: ^1.0.1
+  get_mac: ^0.0.1
+  device_information: ^0.0.4
+  macadress_gen: ^0.0.4
+  permission_asker: ^1.0.0+1
 
 dev_dependencies:
   flutter_test:
