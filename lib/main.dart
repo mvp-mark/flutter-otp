@@ -37,8 +37,6 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   // This list hold the items of the list view
-  // String OTP = metodo();
-  // TOTP OTP = totp as TOTP;
   String OTP = metodoOtp;
   // This variable determines whether the timer runs or not
   bool _isRunning = true;
@@ -46,26 +44,17 @@ class _HomeScreenState extends State<HomeScreen> {
   // This function will be triggered every 1 second
   void _addItem() {
     final DateTime now = DateTime.now();
-    //setState(() {
-    //  opa =  metodo();
-    // _items.add("${now.hour}:${now.minute}:${now.second}");
-    //OTP=opa;
-
-    //print("otp: ${OTP.toString()}");
-    // print("uri: ${otpAuthUri}");
-
-    // });
   }
 
   Timer? _timer;
   @override
   void initState() {
-    _timer = new Timer.periodic(Duration(seconds: 3), (Timer timer) {
-      setState(() {
-        OTP = metodoOtp;
-      });
-      //_addItem();
+    // _timer = new Timer.periodic(Duration(seconds: 3), (Timer timer) {
+    setState(() {
+      OTP = metodoOtp;
     });
+    //_addItem();
+    // });
     super.initState();
   }
 
@@ -90,13 +79,11 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // if we got our data
             } else if (snapshot.hasData) {
-              Future.delayed(Duration(seconds: 5), () {
+              Future.delayed(Duration(seconds: 1), () {
                 setState(() {
                   OTP = metodoOtp;
                 });
-                // throw Exception("Custom Error");
               });
-              // Extracting data from snapshot object
               String data = snapshot.data as String;
               return Center(
                 child: Column(
@@ -122,14 +109,6 @@ class _HomeScreenState extends State<HomeScreen> {
         },
         future: metodo(),
       ),
-      //     floatingActionButton: FloatingActionButton(
-      // onPressed: () {
-      //   setState(() {
-      //     _isRunning = false;
-      //   });
-      // },
-      // child: Icon(Icons.stop_circle),
-      // ),
     );
   }
 }
