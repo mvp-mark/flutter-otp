@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:permission_asker/permission_asker.dart';
+import 'package:totp/controller/imei_controller.dart';
 import 'dart:async';
 import 'package:totp/totp.dart';
 
@@ -26,7 +28,8 @@ class MyApp extends StatelessWidget {
 
 // TOTP? totp;
 
-String metodoOtp = metodo().toString();
+ImeiController imei = ImeiController();
+String metodoOtp = metodo(imei).toString();
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -40,21 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
   String OTP = metodoOtp;
   // This variable determines whether the timer runs or not
   bool _isRunning = true;
-
+  String? totp;
   // This function will be triggered every 1 second
-  void _addItem() {
-    final DateTime now = DateTime.now();
-  }
 
   Timer? _timer;
   @override
   void initState() {
-    // _timer = new Timer.periodic(Duration(seconds: 3), (Timer timer) {
-    setState(() {
-      OTP = metodoOtp;
+    // ignore: unnecessary_new
+    imei.addListener(() {
+      setState(() {});
     });
-    //_addItem();
-    // });
     super.initState();
   }
 
@@ -62,10 +60,12 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Marcus OTP'),
+        title: const Text('Marcus OTP'),
       ),
       body: FutureBuilder(
+        future: metodo(imei),
         builder: (ctx, snapshot) {
+          final data = snapshot.data;
           // Checking if future is resolved or not
           if (snapshot.connectionState == ConnectionState.done) {
             // If we got an error
@@ -79,12 +79,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
               // if we got our data
             } else if (snapshot.hasData) {
-              Future.delayed(Duration(seconds: 1), () {
-                setState(() {
-                  OTP = metodoOtp;
-                });
+              Future.delayed(Duration(milliseconds: 30010), () {
+                setState(() {});
               });
-              String data = snapshot.data as String;
+
               return Center(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -94,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Text(
                       '${data}',
-                      style: Theme.of(context).textTheme.headline4,
+                      style: Theme.of(context).textTheme.headline1,
                     ),
                   ],
                 ),
@@ -107,8 +105,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: CircularProgressIndicator(),
           );
         },
-        future: metodo(),
+        // future: metodo(imei),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _timer!.cancel();
+    super.dispose();
   }
 }
